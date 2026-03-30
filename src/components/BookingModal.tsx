@@ -1,11 +1,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import type { Package } from "@/types"
@@ -114,7 +109,7 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
               <select
                 value={waktu}
                 onChange={(e) => setWaktu(e.target.value)}
-                className={`flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring ${submitted && !waktu ? "border-red-500 focus:ring-red-500" : "border-input"}`}
+                className={`focus:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none ${submitted && !waktu ? "border-red-500 focus:ring-red-500" : "border-input"}`}
               >
                 <option value="">Pilih waktu</option>
                 {timeSlots.map((slot) => (
