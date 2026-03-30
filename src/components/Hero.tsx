@@ -10,6 +10,9 @@ const Hero = () => {
           src="/images/hero.webp"
           alt="Suasana restoran Dapur Nusantara dengan meja makan dan hidangan nusantara"
           className="h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
       </div>

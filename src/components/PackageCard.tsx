@@ -18,7 +18,13 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
     <Card className="overflow-hidden border-[#E5E7EB] pt-0">
       {/* Image */}
       <div className="relative h-48 overflow-hidden sm:h-56">
-        <img src={pkg.image} alt={pkg.name} className="h-full w-full object-cover" />
+        <img
+          src={pkg.image}
+          alt={pkg.name}
+          className="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
         {pkg.tags.map((tag) => (
           <Badge
             key={tag}
