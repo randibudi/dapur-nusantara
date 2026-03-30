@@ -3,6 +3,7 @@ import { toast } from "sonner"
 import AddonGrid from "@/components/AddonGrid"
 import BookingModal from "@/components/BookingModal"
 import CartDrawer from "@/components/CartDrawer"
+import Footer from "@/components/Footer"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
 import ReviewSection from "@/components/ReviewSection"
@@ -54,6 +55,7 @@ const App = () => {
         onClose={() => setSelectedPkg(null)}
       />
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <Footer />
     </main>
   )
 }
