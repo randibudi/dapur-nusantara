@@ -13,6 +13,8 @@ export interface Package {
   availability: string
   timeSlot: string
   duration: number
+  orderCount?: number
+  soldOut?: boolean
 }
 
 export interface Addon {

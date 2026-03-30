@@ -16,6 +16,7 @@ export const packages: Package[] = [
     availability: "Sen-Jum 11:00-15:00",
     timeSlot: "11:00-15:00",
     duration: 90,
+    orderCount: 312,
   },
   {
     id: "prasmanan-malam",
@@ -30,6 +31,7 @@ export const packages: Package[] = [
     availability: "Setiap hari 18:00-22:00",
     timeSlot: "18:00-22:00",
     duration: 120,
+    orderCount: 487,
   },
   {
     id: "brunch-akhir-pekan",
@@ -43,7 +45,9 @@ export const packages: Package[] = [
     tags: ["Sabtu - Minggu"],
     availability: "Sab-Min 10:00-15:00",
     timeSlot: "10:00-15:00",
+    soldOut: true,
     duration: 120,
+    orderCount: 198,
   },
 
   // === Paket Rame ===
@@ -67,6 +71,7 @@ export const packages: Package[] = [
     availability: "Setiap hari",
     timeSlot: "11:00-22:00",
     duration: 0,
+    orderCount: 423,
   },
   {
     id: "paket-nusantara",
@@ -88,6 +93,7 @@ export const packages: Package[] = [
     availability: "Setiap hari",
     timeSlot: "11:00-22:00",
     duration: 0,
+    orderCount: 267,
   },
   {
     id: "paket-ulang-tahun",
@@ -102,6 +108,8 @@ export const packages: Package[] = [
     availability: "Setiap hari",
     timeSlot: "11:00-22:00",
     duration: 0,
+    orderCount: 89,
+    soldOut: true,
   },
   {
     id: "paket-arisan",
@@ -116,5 +124,6 @@ export const packages: Package[] = [
     availability: "Setiap hari",
     timeSlot: "11:00-22:00",
     duration: 0,
+    orderCount: 54,
   },
 ]

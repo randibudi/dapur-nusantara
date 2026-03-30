@@ -1,6 +1,15 @@
 import { Star } from "lucide-react"
 import { reviews } from "@/data/reviews"
 
+const relativeDate = (dateStr: string): string => {
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000)
+  if (diff === 0) return "Hari ini"
+  if (diff === 1) return "Kemarin"
+  if (diff < 30) return `${diff} hari yang lalu`
+  if (diff < 365) return `${Math.floor(diff / 30)} bulan yang lalu`
+  return `${Math.floor(diff / 365)} tahun yang lalu`
+}
+
 const ReviewSection = () => {
   const avgRating = (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
 
@@ -22,7 +31,9 @@ const ReviewSection = () => {
             <div className="mb-2 flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="font-medium">{review.name}</p>
-                <p className="text-muted-foreground text-xs">{review.packageName}</p>
+                <p className="text-muted-foreground text-xs">
+                  {review.packageName} · {relativeDate(review.date)}
+                </p>
               </div>
               <div className="flex shrink-0 gap-0.5">
                 {[...Array(5)].map((_, i) => (

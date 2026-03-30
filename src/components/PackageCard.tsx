@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Package } from "@/types"
 import { formatPrice, formatPricePerPerson } from "@/utils/format"
-import { Clock, Users } from "lucide-react"
+import { Clock, TrendingUp, Users } from "lucide-react"
 
 interface PackageCardProps {
   pkg: Package
@@ -13,6 +13,7 @@ interface PackageCardProps {
 
 const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
   const isSepuasnya = pkg.type === "sepuasnya"
+  const available = !pkg.soldOut
 
   return (
     <Card className="overflow-hidden border-[#E5E7EB] pt-0">
@@ -37,7 +38,18 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
 
       {/* Content */}
       <CardContent className="p-4">
-        <h3 className="text-lg font-bold text-[#111827]">{pkg.name}</h3>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-lg font-bold text-[#111827]">{pkg.name}</h3>
+          {isSepuasnya ? (
+            <span className="mt-0.5 shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-600">
+              Booking Langsung
+            </span>
+          ) : (
+            <span className="mt-0.5 shrink-0 rounded-full bg-orange-50 px-2 py-0.5 text-[11px] font-medium text-orange-600">
+              Via Keranjang
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-sm text-[#6B7280]">{pkg.description}</p>
 
         {/* Menu items */}
@@ -63,8 +75,18 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
               {pkg.servesCount} orang
             </span>
           )}
-          <span>{pkg.availability}</span>
+          <span className="inline-flex items-center">{pkg.availability}</span>
         </div>
+
+        {/* Order count */}
+        {pkg.orderCount && (
+          <div className="mt-2">
+            <span className="flex items-center gap-1 text-xs text-[#6B7280]">
+              <TrendingUp className="h-3.5 w-3.5 text-[#F59E0B]" />
+              Dipesan {pkg.orderCount}x bulan ini
+            </span>
+          </div>
+        )}
 
         {/* Price + Action */}
         <div className="mt-4 flex items-center justify-between">
@@ -72,16 +94,28 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
             {isSepuasnya ? formatPricePerPerson(pkg.price) : formatPrice(pkg.price)}
           </span>
           {isSepuasnya ? (
-            <Button className="bg-[#DC2626] hover:bg-[#B91C1C]" onClick={() => onPesan(pkg)}>
-              Pesan
+            <Button
+              className={
+                available
+                  ? "bg-[#DC2626] hover:bg-[#B91C1C]"
+                  : "cursor-default bg-gray-100 text-gray-400 hover:bg-gray-100"
+              }
+              disabled={!available}
+              onClick={() => onPesan(pkg)}
+            >
+              {available ? "Pesan" : "Sudah Penuh"}
             </Button>
           ) : (
             <Button
-              variant="outline"
-              className="border-[#DC2626] text-[#DC2626] hover:bg-[#DC2626]/5"
+              className={
+                available
+                  ? "bg-[#DC2626] hover:bg-[#B91C1C]"
+                  : "cursor-default bg-gray-100 text-gray-400 hover:bg-gray-100"
+              }
+              disabled={!available}
               onClick={() => onTambah(pkg)}
             >
-              Tambah
+              {available ? "Tambah" : "Sudah Penuh"}
             </Button>
           )}
         </div>

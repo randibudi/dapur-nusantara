@@ -12,9 +12,12 @@ createRoot(document.getElementById("root")!).render(
       <Toaster
         position="bottom-right"
         toastOptions={{
+          duration: 2000,
           style: {
             background: "var(--destructive)",
             color: "white",
+            border: "1px solid rgba(255,255,255,0.15)",
+            boxShadow: "0 4px 16px rgba(185, 28, 28, 0.45)",
           },
         }}
       />

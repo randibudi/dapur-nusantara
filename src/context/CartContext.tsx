@@ -1,5 +1,16 @@
-import { createContext, useContext, useReducer } from "react"
+import { createContext, useContext, useEffect, useReducer } from "react"
 import type { Addon, CartItem, Package } from "@/types"
+
+const STORAGE_KEY = "dapur-nusantara-cart"
+
+const loadFromStorage = (): CartItem[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
 
 type Action =
   | { type: "ADD_ITEM"; item: Package | Addon }
@@ -51,7 +62,11 @@ interface CartContextValue {
 const CartContext = createContext<CartContextValue | null>(null)
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+  const [state, dispatch] = useReducer(cartReducer, { items: loadFromStorage() })
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items))
+  }, [state.items])
 
   const totalItems = state.items.reduce((acc, ci) => acc + ci.quantity, 0)
 

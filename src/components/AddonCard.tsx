@@ -27,9 +27,8 @@ const AddonCard = ({ addon, onTambah }: AddonCardProps) => {
           </span>
         </div>
         <Button
-          variant="outline"
           size="sm"
-          className="shrink-0 border-[#DC2626] text-[#DC2626] hover:bg-[#DC2626]/5"
+          className="shrink-0 bg-[#DC2626] hover:bg-[#B91C1C]"
           onClick={() => onTambah(addon)}
         >
           Tambah

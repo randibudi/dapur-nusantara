@@ -6,8 +6,8 @@ import { Separator } from "@/components/ui/separator"
 import type { Package } from "@/types"
 import { formatPrice } from "@/utils/format"
 import { calculateServiceFee, calculatePPN, calculateTotal } from "@/utils/price"
-import { generateTimeSlots } from "@/utils/time"
-import { Minus, Plus } from "lucide-react"
+import { filterPastSlots, generateTimeSlots, localToday } from "@/utils/time"
+import { ChevronDown, Loader2, Minus, Plus } from "lucide-react"
 import SuccessModal from "@/components/SuccessModal"
 import { isValidPhoneNumber } from "@/utils/whatsapp"
 
@@ -25,6 +25,7 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
   const [phone, setPhone] = useState("")
   const [note, setNote] = useState("")
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [successOpen, setSuccessOpen] = useState(false)
   const [orderId, setOrderId] = useState("")
 
@@ -35,16 +36,21 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
   const serviceFee = calculateServiceFee(subtotal)
   const total = calculateTotal(subtotal)
 
-  const timeSlots = generateTimeSlots(pkg.timeSlot)
+  const allTimeSlots = generateTimeSlots(pkg.timeSlot)
+  const timeSlots = filterPastSlots(allTimeSlots, date)
   const isPhoneValid = isValidPhoneNumber(phone)
   const isValid = date && time && name.trim() && phone.trim() && isPhoneValid
 
   const handleConfirm = () => {
     setSubmitted(true)
     if (!isValid) return
-    const id = `#AYCE-${Math.floor(10000 + Math.random() * 90000)}`
-    setOrderId(id)
-    setSuccessOpen(true)
+    setLoading(true)
+    setTimeout(() => {
+      const id = `#AYCE-${Math.floor(10000 + Math.random() * 90000)}`
+      setOrderId(id)
+      setLoading(false)
+      setSuccessOpen(true)
+    }, 1500)
   }
 
   const handleClose = () => {
@@ -80,7 +86,7 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
         note={note}
       />
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{pkg.name}</DialogTitle>
             <p className="text-sm text-[#6B7280]">
@@ -122,25 +128,31 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
                 <Input
                   type="date"
                   value={date}
-                  min={new Date().toISOString().split("T")[0]}
-                  onChange={(e) => setDate(e.target.value)}
+                  min={localToday()}
+                  onChange={(e) => {
+                    setDate(e.target.value)
+                    setTime("")
+                  }}
                   className={fieldError(date)}
                 />
               </div>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium text-[#111827]">Waktu</label>
-                <select
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className={`focus:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus:ring-1 focus:outline-none ${submitted && !time ? "border-red-500 focus:ring-red-500" : "border-input"}`}
-                >
-                  <option value="">Pilih waktu</option>
-                  {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    className={`h-8 w-full appearance-none rounded-lg border bg-transparent px-2.5 py-1 pr-7 text-sm transition-colors outline-none ${submitted && !time ? "border-red-500" : "border-input"}`}
+                  >
+                    <option value="">Pilih waktu</option>
+                    {timeSlots.map((slot) => (
+                      <option key={slot} value={slot}>
+                        {slot}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-[#6B7280]" />
+                </div>
               </div>
             </div>
 
@@ -190,7 +202,7 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
                   type="tel"
                   placeholder="08xxxxxxxxxx"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                   className={fieldError(phone)}
                 />
                 {submitted && phone && !isPhoneValid && (
@@ -209,10 +221,16 @@ const BookingModal = ({ pkg, open, onClose }: BookingModalProps) => {
 
             <Button
               className="w-full bg-[#DC2626] hover:bg-[#B91C1C]"
-              disabled={submitted && !isValid}
+              disabled={loading || (submitted && !isValid)}
               onClick={handleConfirm}
             >
-              Konfirmasi Pesanan
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses...
+                </>
+              ) : (
+                "Konfirmasi Pesanan"
+              )}
             </Button>
           </div>
         </DialogContent>

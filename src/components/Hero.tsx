@@ -49,8 +49,8 @@ const Hero = () => {
               <Clock className="h-4 w-4 shrink-0 text-[#DC2626]" />
               <span>Setiap hari 11:00 - 22:00</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-[#6B7280]">
-              <MapPin className="h-4 w-4 shrink-0 text-[#DC2626]" />
+            <div className="flex items-start gap-2 text-sm text-[#6B7280]">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#DC2626]" />
               <span>Jl. Senopati No. 45, Kebayoran Baru, Jakarta Selatan</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-[#6B7280]">

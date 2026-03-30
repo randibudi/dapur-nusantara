@@ -4,8 +4,8 @@ import { Input } from "@/components/ui/input"
 import { useCart } from "@/context/CartContext"
 import { formatPrice } from "@/utils/format"
 import { calculateServiceFee, calculatePPN, calculateSubtotal, calculateTotal } from "@/utils/price"
-import { generateTimeSlots } from "@/utils/time"
-import { ShoppingCart, X } from "lucide-react"
+import { filterPastSlots, generateTimeSlots, localToday } from "@/utils/time"
+import { ChevronDown, Loader2, ShoppingCart, X } from "lucide-react"
 import CartItemRow from "@/components/CartItemRow"
 import SuccessModal from "@/components/SuccessModal"
 import { isValidPhoneNumber } from "@/utils/whatsapp"
@@ -15,7 +15,7 @@ interface CartDrawerProps {
   onClose: () => void
 }
 
-const TIME_SLOTS = generateTimeSlots("11:00-22:00")
+const BASE_TIME_SLOTS = generateTimeSlots("11:00-22:00")
 
 const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   const { items, totalItems, removeItem, updateQty, clearCart } = useCart()
@@ -26,8 +26,11 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   const [phone, setPhone] = useState("")
   const [note, setNote] = useState("")
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [successOpen, setSuccessOpen] = useState(false)
   const [orderId, setOrderId] = useState("")
+
+  const timeSlots = filterPastSlots(BASE_TIME_SLOTS, date)
 
   const subtotal = calculateSubtotal(items)
   const ppn = calculatePPN(subtotal)
@@ -113,7 +116,11 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
               <p className="font-semibold text-[#111827]">Keranjang masih kosong</p>
               <p className="mt-1 text-sm text-[#6B7280]">Tambahkan paket atau minuman & camilan</p>
             </div>
-            <Button variant="outline" className="border-[#DC2626] text-[#DC2626]" onClick={onClose}>
+            <Button
+              variant="outline"
+              className="border-[#DC2626] text-[#DC2626] hover:bg-red-50 hover:text-[#DC2626]"
+              onClick={onClose}
+            >
               Lihat Menu
             </Button>
           </div>
@@ -142,27 +149,33 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
                       <Input
                         type="date"
                         value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        min={new Date().toISOString().split("T")[0]}
+                        onChange={(e) => {
+                          setDate(e.target.value)
+                          setTime("")
+                        }}
+                        min={localToday()}
                         className={submitted && !date ? "border-red-500" : ""}
                       />
                     </div>
                     <div>
                       <label className="mb-1 block text-xs text-[#6B7280]">Waktu</label>
-                      <select
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        className={`h-10 w-full rounded-md border px-3 text-sm focus:outline-none ${
-                          submitted && !time ? "border-red-500" : "border-[#E5E7EB]"
-                        }`}
-                      >
-                        <option value="">Pilih waktu</option>
-                        {TIME_SLOTS.map((slot) => (
-                          <option key={slot} value={slot}>
-                            {slot}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <select
+                          value={time}
+                          onChange={(e) => setTime(e.target.value)}
+                          className={`h-8 w-full appearance-none rounded-lg border bg-transparent px-2.5 py-1 pr-7 text-sm transition-colors outline-none ${
+                            submitted && !time ? "border-red-500" : "border-input"
+                          }`}
+                        >
+                          <option value="">Pilih waktu</option>
+                          {timeSlots.map((slot) => (
+                            <option key={slot} value={slot}>
+                              {slot}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-[#6B7280]" />
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -180,7 +193,7 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
                       type="tel"
                       placeholder="08xxxxxxxxxx"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                       className={submitted && !phone ? "border-red-500" : ""}
                     />
                     {submitted && phone && !isPhoneValid && (
@@ -221,16 +234,26 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
               </div>
               <Button
                 className="w-full bg-[#DC2626] text-white hover:bg-[#B91C1C] disabled:opacity-50"
-                disabled={submitted && !isFormValid}
+                disabled={loading || (submitted && !isFormValid)}
                 onClick={() => {
                   setSubmitted(true)
                   if (!isFormValid || !isPhoneValid) return
-                  const id = `#PKT-${Math.floor(10000 + Math.random() * 90000)}`
-                  setOrderId(id)
-                  setSuccessOpen(true)
+                  setLoading(true)
+                  setTimeout(() => {
+                    const id = `#PKT-${Math.floor(10000 + Math.random() * 90000)}`
+                    setOrderId(id)
+                    setLoading(false)
+                    setSuccessOpen(true)
+                  }, 1500)
                 }}
               >
-                Pesan Sekarang
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses...
+                  </>
+                ) : (
+                  "Pesan Sekarang"
+                )}
               </Button>
             </div>
           </>
