@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { toast } from "sonner"
 import AddonGrid from "@/components/AddonGrid"
 import BookingModal from "@/components/BookingModal"
 import CartDrawer from "@/components/CartDrawer"
@@ -29,10 +30,20 @@ const App = () => {
           <PackageGrid
             activeTab={activeTab}
             onPesan={(pkg: Package) => setSelectedPkg(pkg)}
-            onTambah={(pkg: Package) => addItem(pkg)}
+            onTambah={(pkg: Package) => {
+              addItem(pkg)
+              toast.success("Ditambahkan ke keranjang")
+            }}
           />
         )}
-        {activeTab === "tambahan" && <AddonGrid onTambah={(addon: Addon) => addItem(addon)} />}
+        {activeTab === "tambahan" && (
+          <AddonGrid
+            onTambah={(addon: Addon) => {
+              addItem(addon)
+              toast.success("Ditambahkan ke keranjang")
+            }}
+          />
+        )}
       </div>
 
       <BookingModal
