@@ -5,6 +5,7 @@ import BookingModal from "@/components/BookingModal"
 import CartDrawer from "@/components/CartDrawer"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
+import ReviewSection from "@/components/ReviewSection"
 import TabNav from "@/components/TabNav"
 import { useCart } from "@/context/CartContext"
 import type { Addon, Package } from "@/types"
@@ -44,6 +45,7 @@ const App = () => {
             }}
           />
         )}
+        {activeTab === "ulasan" && <ReviewSection />}
       </div>
 
       <BookingModal
