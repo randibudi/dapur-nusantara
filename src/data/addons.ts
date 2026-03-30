@@ -1,7 +1,6 @@
 import type { Addon } from "@/types"
 
 export const addons: Addon[] = [
-  // === Minuman ===
   {
     id: "es-teh-manis",
     name: "Es Teh Manis",
@@ -19,22 +18,6 @@ export const addons: Addon[] = [
     image: "/images/es-jeruk-segar.webp",
   },
   {
-    id: "jus-mangga",
-    name: "Jus Mangga",
-    category: "minuman",
-    price: 20000,
-    description: "Jus mangga segar tanpa campuran air",
-    image: "/images/jus-mangga.webp",
-  },
-  {
-    id: "jus-alpukat",
-    name: "Jus Alpukat",
-    category: "minuman",
-    price: 25000,
-    description: "Jus alpukat creamy dengan susu",
-    image: "/images/jus-alpukat.webp",
-  },
-  {
     id: "kopi-susu-gula-aren",
     name: "Kopi Susu Gula Aren",
     category: "minuman",
@@ -42,24 +25,7 @@ export const addons: Addon[] = [
     description: "Kopi susu dengan manisnya gula aren",
     image: "/images/kopi-susu-gula-aren.webp",
   },
-  {
-    id: "teko-teh-tarik",
-    name: "Teko Teh Tarik (4 gelas)",
-    category: "minuman",
-    price: 35000,
-    description: "Teh tarik creamy untuk berbagi, isi 4 gelas",
-    image: "/images/teko-teh-tarik.webp",
-  },
-  {
-    id: "teko-es-jeruk",
-    name: "Teko Es Jeruk (4 gelas)",
-    category: "minuman",
-    price: 45000,
-    description: "Es jeruk segar satu teko, isi 4 gelas",
-    image: "/images/teko-es-jeruk.webp",
-  },
 
-  // === Camilan ===
   {
     id: "kerupuk-udang",
     name: "Kerupuk Udang (1 porsi)",
@@ -67,22 +33,6 @@ export const addons: Addon[] = [
     price: 12000,
     description: "Kerupuk udang renyah pendamping makan",
     image: "/images/kerupuk-udang.webp",
-  },
-  {
-    id: "perkedel-jagung",
-    name: "Perkedel Jagung (4 pcs)",
-    category: "camilan",
-    price: 18000,
-    description: "Perkedel jagung manis gurih, 4 buah",
-    image: "/images/perkedel-jagung.webp",
-  },
-  {
-    id: "tahu-crispy",
-    name: "Tahu Crispy Sambal Kecap (8 pcs)",
-    category: "camilan",
-    price: 18000,
-    description: "Tahu goreng crispy dengan sambal kecap pedas manis",
-    image: "/images/tahu-crispy.webp",
   },
   {
     id: "pisang-goreng-kipas",

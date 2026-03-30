@@ -15,9 +15,9 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
   const isSepuasnya = pkg.type === "sepuasnya"
 
   return (
-    <Card className="overflow-hidden border-[#E5E7EB]">
+    <Card className="overflow-hidden border-[#E5E7EB] pt-0">
       {/* Image */}
-      <div className="relative h-40 overflow-hidden sm:h-48">
+      <div className="relative h-48 overflow-hidden sm:h-56">
         <img src={pkg.image} alt={pkg.name} className="h-full w-full object-cover" />
         {pkg.tags.map((tag) => (
           <Badge

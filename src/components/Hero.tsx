@@ -15,7 +15,7 @@ const Hero = () => {
       </div>
 
       {/* Restaurant Info */}
-      <div className="relative mx-auto -mt-24 max-w-4xl px-4 sm:-mt-32 sm:px-6">
+      <div className="relative mx-auto -mt-16 max-w-4xl px-4 sm:-mt-20 sm:px-6">
         <div className="rounded-xl bg-white p-6 shadow-lg sm:p-8">
           <h1 className="text-2xl font-bold text-[#111827] sm:text-3xl">Dapur Nusantara</h1>
           <p className="mt-1 text-[#6B7280]">Cita Rasa Nusantara, Harga Pasti, Tanpa Kejutan</p>
