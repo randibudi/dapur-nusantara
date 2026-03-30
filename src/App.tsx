@@ -1,39 +1,38 @@
 import { useState } from "react"
 import AddonGrid from "@/components/AddonGrid"
 import BookingModal from "@/components/BookingModal"
+import CartDrawer from "@/components/CartDrawer"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
 import TabNav from "@/components/TabNav"
+import { useCart } from "@/context/CartContext"
 import type { Addon, Package } from "@/types"
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState("semua")
+  const [activeTab, setActiveTab] = useState("sepuasnya")
   const [selectedPkg, setSelectedPkg] = useState<Package | null>(null)
-
-  const handlePesan = (pkg: Package) => setSelectedPkg(pkg)
-
-  const handleTambahPaket = (pkg: Package) => {
-    // TODO: tambah ke keranjang (Step 9)
-    console.log("Tambah paket:", pkg.name)
-  }
-
-  const handleTambahAddon = (addon: Addon) => {
-    // TODO: tambah ke keranjang (Step 9)
-    console.log("Tambah addon:", addon.name)
-  }
+  const [cartOpen, setCartOpen] = useState(false)
+  const { addItem } = useCart()
 
   return (
     <main>
       <Hero />
       <div className="h-6" />
-      <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <TabNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onCartClick={() => setCartOpen(true)}
+      />
 
-      {/* Tab content */}
       <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-        {(activeTab === "semua" || activeTab === "sepuasnya" || activeTab === "rame") && (
-          <PackageGrid activeTab={activeTab} onPesan={handlePesan} onTambah={handleTambahPaket} />
+        {(activeTab === "sepuasnya" || activeTab === "rame") && (
+          <PackageGrid
+            activeTab={activeTab}
+            onPesan={(pkg: Package) => setSelectedPkg(pkg)}
+            onTambah={(pkg: Package) => addItem(pkg)}
+          />
         )}
-        {activeTab === "tambahan" && <AddonGrid onTambah={handleTambahAddon} />}
+        {activeTab === "tambahan" && <AddonGrid onTambah={(addon: Addon) => addItem(addon)} />}
       </div>
 
       <BookingModal
@@ -41,6 +40,7 @@ const App = () => {
         open={selectedPkg !== null}
         onClose={() => setSelectedPkg(null)}
       />
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </main>
   )
 }

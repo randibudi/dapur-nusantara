@@ -3,7 +3,7 @@ import { Clock, MapPin, Phone, Star, Users } from "lucide-react"
 
 const Hero = () => {
   return (
-    <section className="relative">
+    <section className="relative z-0">
       {/* Hero Image */}
       <div className="relative h-[300px] overflow-hidden sm:h-[400px]">
         <img

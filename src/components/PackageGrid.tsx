@@ -3,35 +3,26 @@ import { packages } from "@/data/packages"
 import type { Package } from "@/types"
 
 interface PackageGridProps {
-  activeTab: string
+  activeTab: "sepuasnya" | "rame"
   onPesan: (pkg: Package) => void
   onTambah: (pkg: Package) => void
 }
 
-const PackageGrid = ({ activeTab, onPesan, onTambah }: PackageGridProps) => {
-  const filtered = packages.filter((pkg) => {
-    if (activeTab === "semua") return true
-    if (activeTab === "sepuasnya") return pkg.type === "sepuasnya"
-    if (activeTab === "rame") return pkg.type === "rame"
-    return false
-  })
+const headings = {
+  sepuasnya: { title: "Makan Sepuasnya", sub: "Pesan langsung · harga per orang" },
+  rame: { title: "Paket Rame", sub: "Tambah ke keranjang · harga per paket" },
+}
 
-  if (filtered.length === 0) return null
+const PackageGrid = ({ activeTab, onPesan, onTambah }: PackageGridProps) => {
+  const items = packages.filter((pkg) => pkg.type === activeTab)
+  const { title, sub } = headings[activeTab]
 
   return (
     <section>
-      {activeTab === "semua" && (
-        <h2 className="mb-4 text-xl font-bold text-[#111827]">Pilihan Paket</h2>
-      )}
-      {activeTab === "sepuasnya" && (
-        <h2 className="mb-4 text-xl font-bold text-[#111827]">Makan Sepuasnya</h2>
-      )}
-      {activeTab === "rame" && (
-        <h2 className="mb-4 text-xl font-bold text-[#111827]">Paket Rame</h2>
-      )}
-
+      <h2 className="mb-1 text-xl font-bold text-[#111827]">{title}</h2>
+      <p className="mb-4 text-sm text-[#6B7280]">{sub}</p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {filtered.map((pkg) => (
+        {items.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} onPesan={onPesan} onTambah={onTambah} />
         ))}
       </div>
