@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Package } from "@/types"
+import { formatHarga, formatHargaPerOrang } from "@/utils/format"
 import { Clock, Users } from "lucide-react"
 
 interface PackageCardProps {
@@ -61,7 +62,9 @@ const PackageCard = ({ pkg, onPesan, onTambah }: PackageCardProps) => {
 
         {/* Price + Action */}
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-lg font-bold text-[#DC2626]">{pkg.priceLabel}</span>
+          <span className="text-lg font-bold text-[#DC2626]">
+            {isSepuasnya ? formatHargaPerOrang(pkg.price) : formatHarga(pkg.price)}
+          </span>
           {isSepuasnya ? (
             <Button className="bg-[#DC2626] hover:bg-[#B91C1C]" onClick={() => onPesan(pkg)}>
               Pesan

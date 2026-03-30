@@ -8,6 +8,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 8000,
     description: "Teh manis dingin yang menyegarkan",
+    image: "/images/es-teh-manis.webp",
   },
   {
     id: "es-jeruk-segar",
@@ -15,6 +16,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 15000,
     description: "Perasan jeruk segar dengan es",
+    image: "/images/es-jeruk-segar.webp",
   },
   {
     id: "jus-mangga",
@@ -22,6 +24,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 20000,
     description: "Jus mangga segar tanpa campuran air",
+    image: "/images/jus-mangga.webp",
   },
   {
     id: "jus-alpukat",
@@ -29,6 +32,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 25000,
     description: "Jus alpukat creamy dengan susu",
+    image: "/images/jus-alpukat.webp",
   },
   {
     id: "kopi-susu-gula-aren",
@@ -36,6 +40,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 22000,
     description: "Kopi susu dengan manisnya gula aren",
+    image: "/images/kopi-susu-gula-aren.webp",
   },
   {
     id: "teko-teh-tarik",
@@ -43,6 +48,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 35000,
     description: "Teh tarik creamy untuk berbagi, isi 4 gelas",
+    image: "/images/teko-teh-tarik.webp",
   },
   {
     id: "teko-es-jeruk",
@@ -50,6 +56,7 @@ export const addons: Addon[] = [
     category: "minuman",
     price: 45000,
     description: "Es jeruk segar satu teko, isi 4 gelas",
+    image: "/images/teko-es-jeruk.webp",
   },
 
   // === Camilan ===
@@ -59,6 +66,7 @@ export const addons: Addon[] = [
     category: "camilan",
     price: 12000,
     description: "Kerupuk udang renyah pendamping makan",
+    image: "/images/kerupuk-udang.webp",
   },
   {
     id: "perkedel-jagung",
@@ -66,6 +74,7 @@ export const addons: Addon[] = [
     category: "camilan",
     price: 18000,
     description: "Perkedel jagung manis gurih, 4 buah",
+    image: "/images/perkedel-jagung.webp",
   },
   {
     id: "tahu-crispy",
@@ -73,6 +82,7 @@ export const addons: Addon[] = [
     category: "camilan",
     price: 18000,
     description: "Tahu goreng crispy dengan sambal kecap pedas manis",
+    image: "/images/tahu-crispy.webp",
   },
   {
     id: "pisang-goreng-kipas",
@@ -80,6 +90,7 @@ export const addons: Addon[] = [
     category: "camilan",
     price: 22000,
     description: "Pisang goreng bentuk kipas yang renyah di luar, lembut di dalam",
+    image: "/images/pisang-goreng-kipas.webp",
   },
   {
     id: "lumpia-semarang",
@@ -87,5 +98,6 @@ export const addons: Addon[] = [
     category: "camilan",
     price: 25000,
     description: "Lumpia isi rebung dan udang khas Semarang",
+    image: "/images/lumpia-semarang.webp",
   },
 ]

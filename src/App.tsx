@@ -1,8 +1,9 @@
 import { useState } from "react"
+import AddonGrid from "@/components/AddonGrid"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
 import TabNav from "@/components/TabNav"
-import type { Package } from "@/types"
+import type { Addon, Package } from "@/types"
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("semua")
@@ -12,9 +13,14 @@ const App = () => {
     console.log("Pesan:", pkg.name)
   }
 
-  const handleTambah = (pkg: Package) => {
+  const handleTambahPaket = (pkg: Package) => {
     // TODO: tambah ke keranjang (Step 9)
-    console.log("Tambah:", pkg.name)
+    console.log("Tambah paket:", pkg.name)
+  }
+
+  const handleTambahAddon = (addon: Addon) => {
+    // TODO: tambah ke keranjang (Step 9)
+    console.log("Tambah addon:", addon.name)
   }
 
   return (
@@ -26,8 +32,9 @@ const App = () => {
       {/* Tab content */}
       <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
         {(activeTab === "semua" || activeTab === "sepuasnya" || activeTab === "rame") && (
-          <PackageGrid activeTab={activeTab} onPesan={handlePesan} onTambah={handleTambah} />
+          <PackageGrid activeTab={activeTab} onPesan={handlePesan} onTambah={handleTambahPaket} />
         )}
+        {activeTab === "tambahan" && <AddonGrid onTambah={handleTambahAddon} />}
       </div>
     </main>
   )

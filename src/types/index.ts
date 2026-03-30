@@ -5,7 +5,6 @@ export interface Package {
   name: string
   type: PackageType
   price: number
-  priceLabel: string
   servesCount: number
   image: string
   description: string
@@ -22,6 +21,7 @@ export interface Addon {
   category: "minuman" | "camilan"
   price: number
   description: string
+  image: string
 }
 
 export interface CartItem {
