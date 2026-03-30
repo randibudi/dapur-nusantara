@@ -1,6 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { useCart } from "@/context/CartContext"
+import { formatHarga } from "@/utils/format"
+import { hitungLayanan, hitungPPN, hitungSubtotal, hitungTotal } from "@/utils/price"
+import { generateTimeSlots } from "@/utils/time"
 import { ShoppingCart, X } from "lucide-react"
 import CartItemRow from "./CartItemRow"
 
@@ -9,8 +13,25 @@ interface CartDrawerProps {
   onClose: () => void
 }
 
+const TIME_SLOTS = generateTimeSlots("11:00-22:00")
+
 const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   const { items, totalItems, removeItem, updateQty } = useCart()
+
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [note, setNote] = useState("")
+  const [submitted, setSubmitted] = useState(false)
+
+  const subtotal = hitungSubtotal(items)
+  const ppn = hitungPPN(subtotal)
+  const layanan = hitungLayanan(subtotal)
+  const total = hitungTotal(subtotal)
+
+  const isFormValid = !!(date && time && name && phone)
+  const canOrder = items.length > 0 && isFormValid
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
@@ -66,16 +87,117 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
             </Button>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto px-4">
-            {items.map((cartItem) => (
-              <CartItemRow
-                key={cartItem.item.id}
-                cartItem={cartItem}
-                onUpdateQty={updateQty}
-                onRemove={removeItem}
-              />
-            ))}
-          </div>
+          <>
+            {/* Scrollable: item list + booking form */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="px-4">
+                {items.map((cartItem) => (
+                  <CartItemRow
+                    key={cartItem.item.id}
+                    cartItem={cartItem}
+                    onUpdateQty={updateQty}
+                    onRemove={removeItem}
+                  />
+                ))}
+              </div>
+
+              {/* Booking form */}
+              <div className="border-t border-[#E5E7EB] px-4 pt-4 pb-2">
+                <h3 className="mb-3 text-sm font-semibold text-[#111827]">Detail Pemesanan</h3>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="mb-1 block text-xs text-[#6B7280]">Tanggal</label>
+                      <Input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        min={new Date().toISOString().split("T")[0]}
+                        className={submitted && !date ? "border-red-500" : ""}
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-[#6B7280]">Waktu</label>
+                      <select
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        className={`h-10 w-full rounded-md border px-3 text-sm focus:outline-none ${
+                          submitted && !time ? "border-red-500" : "border-[#E5E7EB]"
+                        }`}
+                      >
+                        <option value="">Pilih waktu</option>
+                        {TIME_SLOTS.map((slot) => (
+                          <option key={slot} value={slot}>
+                            {slot}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-[#6B7280]">Nama Lengkap</label>
+                    <Input
+                      placeholder="Nama pemesan"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={submitted && !name ? "border-red-500" : ""}
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-[#6B7280]">Nomor HP</label>
+                    <Input
+                      type="tel"
+                      placeholder="08xxxxxxxxxx"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className={submitted && !phone ? "border-red-500" : ""}
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-[#6B7280]">Catatan (opsional)</label>
+                    <Input
+                      placeholder="Alergi, permintaan khusus, dll"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fixed bottom: price breakdown + CTA */}
+            <div className="border-t border-[#E5E7EB] px-4 py-4">
+              <div className="mb-3 space-y-1 text-sm">
+                <div className="flex justify-between text-[#6B7280]">
+                  <span>Subtotal</span>
+                  <span>{formatHarga(subtotal)}</span>
+                </div>
+                <div className="flex justify-between text-[#6B7280]">
+                  <span>PPN 11%</span>
+                  <span>{formatHarga(ppn)}</span>
+                </div>
+                <div className="flex justify-between text-[#6B7280]">
+                  <span>Layanan 5%</span>
+                  <span>{formatHarga(layanan)}</span>
+                </div>
+                <div className="flex justify-between border-t border-[#E5E7EB] pt-2 font-bold text-[#111827]">
+                  <span>Total</span>
+                  <span className="text-[#DC2626]">{formatHarga(total)}</span>
+                </div>
+              </div>
+              <Button
+                className="w-full bg-[#DC2626] text-white hover:bg-[#B91C1C] disabled:opacity-50"
+                disabled={!canOrder}
+                onClick={() => {
+                  setSubmitted(true)
+                  if (!isFormValid) return
+                  // TODO Step 11: buka SuccessModal + kirim WhatsApp
+                }}
+              >
+                Pesan Sekarang
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </>
