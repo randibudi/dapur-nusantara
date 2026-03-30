@@ -1,6 +1,6 @@
 import { addons } from "@/data/addons"
 import type { Addon } from "@/types"
-import AddonCard from "./AddonCard"
+import AddonCard from "@/components/AddonCard"
 
 interface AddonGridProps {
   onTambah: (addon: Addon) => void

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Addon } from "@/types"
-import { formatHarga } from "@/utils/format"
+import { formatPrice } from "@/utils/format"
 
 interface AddonCardProps {
   addon: Addon
@@ -22,7 +22,7 @@ const AddonCard = ({ addon, onTambah }: AddonCardProps) => {
           <h3 className="font-semibold text-[#111827]">{addon.name}</h3>
           <p className="mt-0.5 text-xs text-[#6B7280]">{addon.description}</p>
           <span className="mt-1 block text-sm font-bold text-[#DC2626]">
-            {formatHarga(addon.price)}
+            {formatPrice(addon.price)}
           </span>
         </div>
         <Button

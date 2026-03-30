@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import type { CartItem } from "@/types"
-import { formatHarga } from "@/utils/format"
+import { formatPrice } from "@/utils/format"
 import { Minus, Plus, Trash2 } from "lucide-react"
 
 interface CartItemRowProps {
@@ -18,7 +18,7 @@ const CartItemRow = ({ cartItem, onUpdateQty, onRemove }: CartItemRowProps) => {
       <div className="flex items-center gap-3 py-3">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-[#111827]">{item.name}</p>
-          <p className="text-xs text-[#6B7280]">{formatHarga(item.price)}</p>
+          <p className="text-xs text-[#6B7280]">{formatPrice(item.price)}</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Button
@@ -42,7 +42,7 @@ const CartItemRow = ({ cartItem, onUpdateQty, onRemove }: CartItemRowProps) => {
           </Button>
         </div>
         <p className="shrink-0 text-right text-sm font-bold text-[#DC2626]">
-          {formatHarga(item.price * quantity)}
+          {formatPrice(item.price * quantity)}
         </p>
       </div>
       <Separator />

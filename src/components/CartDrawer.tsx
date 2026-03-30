@@ -2,11 +2,13 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useCart } from "@/context/CartContext"
-import { formatHarga } from "@/utils/format"
-import { hitungLayanan, hitungPPN, hitungSubtotal, hitungTotal } from "@/utils/price"
+import { formatPrice } from "@/utils/format"
+import { calculateServiceFee, calculatePPN, calculateSubtotal, calculateTotal } from "@/utils/price"
 import { generateTimeSlots } from "@/utils/time"
 import { ShoppingCart, X } from "lucide-react"
-import CartItemRow from "./CartItemRow"
+import CartItemRow from "@/components/CartItemRow"
+import SuccessModal from "@/components/SuccessModal"
+import { isValidPhoneNumber } from "@/utils/whatsapp"
 
 interface CartDrawerProps {
   open: boolean
@@ -16,7 +18,7 @@ interface CartDrawerProps {
 const TIME_SLOTS = generateTimeSlots("11:00-22:00")
 
 const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
-  const { items, totalItems, removeItem, updateQty } = useCart()
+  const { items, totalItems, removeItem, updateQty, clearCart } = useCart()
 
   const [date, setDate] = useState("")
   const [time, setTime] = useState("")
@@ -24,14 +26,16 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
   const [phone, setPhone] = useState("")
   const [note, setNote] = useState("")
   const [submitted, setSubmitted] = useState(false)
+  const [successOpen, setSuccessOpen] = useState(false)
+  const [orderId, setOrderId] = useState("")
 
-  const subtotal = hitungSubtotal(items)
-  const ppn = hitungPPN(subtotal)
-  const layanan = hitungLayanan(subtotal)
-  const total = hitungTotal(subtotal)
+  const subtotal = calculateSubtotal(items)
+  const ppn = calculatePPN(subtotal)
+  const serviceFee = calculateServiceFee(subtotal)
+  const total = calculateTotal(subtotal)
 
-  const isFormValid = !!(date && time && name && phone)
-  const canOrder = items.length > 0 && isFormValid
+  const isPhoneValid = isValidPhoneNumber(phone)
+  const isFormValid = !!(date && time && name.trim() && phone.trim() && isPhoneValid)
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
@@ -40,8 +44,35 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
     }
   }, [open])
 
+  const handleSuccessClose = () => {
+    setSuccessOpen(false)
+    clearCart()
+    setDate("")
+    setTime("")
+    setName("")
+    setPhone("")
+    setNote("")
+    setSubmitted(false)
+    onClose()
+  }
+
   return (
     <>
+      <SuccessModal
+        open={successOpen}
+        onClose={handleSuccessClose}
+        orderId={orderId}
+        name={name}
+        phone={phone}
+        date={date}
+        time={time}
+        lines={items.map(({ item, quantity }) => `${item.name} × ${quantity}`)}
+        subtotal={subtotal}
+        ppn={ppn}
+        serviceFee={serviceFee}
+        total={total}
+        note={note}
+      />
       {/* Backdrop */}
       <div
         className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
@@ -152,6 +183,9 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
                       onChange={(e) => setPhone(e.target.value)}
                       className={submitted && !phone ? "border-red-500" : ""}
                     />
+                    {submitted && phone && !isPhoneValid && (
+                      <p className="text-xs text-red-500">Format nomor tidak valid</p>
+                    )}
                   </div>
                   <div>
                     <label className="mb-1 block text-xs text-[#6B7280]">Catatan (opsional)</label>
@@ -170,28 +204,30 @@ const CartDrawer = ({ open, onClose }: CartDrawerProps) => {
               <div className="mb-3 space-y-1 text-sm">
                 <div className="flex justify-between text-[#6B7280]">
                   <span>Subtotal</span>
-                  <span>{formatHarga(subtotal)}</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-[#6B7280]">
                   <span>PPN 11%</span>
-                  <span>{formatHarga(ppn)}</span>
+                  <span>{formatPrice(ppn)}</span>
                 </div>
                 <div className="flex justify-between text-[#6B7280]">
                   <span>Layanan 5%</span>
-                  <span>{formatHarga(layanan)}</span>
+                  <span>{formatPrice(serviceFee)}</span>
                 </div>
                 <div className="flex justify-between border-t border-[#E5E7EB] pt-2 font-bold text-[#111827]">
                   <span>Total</span>
-                  <span className="text-[#DC2626]">{formatHarga(total)}</span>
+                  <span className="text-[#DC2626]">{formatPrice(total)}</span>
                 </div>
               </div>
               <Button
                 className="w-full bg-[#DC2626] text-white hover:bg-[#B91C1C] disabled:opacity-50"
-                disabled={!canOrder}
+                disabled={submitted && !isFormValid}
                 onClick={() => {
                   setSubmitted(true)
-                  if (!isFormValid) return
-                  // TODO Step 11: buka SuccessModal + kirim WhatsApp
+                  if (!isFormValid || !isPhoneValid) return
+                  const id = `#PKT-${Math.floor(10000 + Math.random() * 90000)}`
+                  setOrderId(id)
+                  setSuccessOpen(true)
                 }}
               >
                 Pesan Sekarang
