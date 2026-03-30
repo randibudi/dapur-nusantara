@@ -1,5 +1,6 @@
 import { useState } from "react"
 import AddonGrid from "@/components/AddonGrid"
+import BookingModal from "@/components/BookingModal"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
 import TabNav from "@/components/TabNav"
@@ -7,11 +8,9 @@ import type { Addon, Package } from "@/types"
 
 const App = () => {
   const [activeTab, setActiveTab] = useState("semua")
+  const [selectedPkg, setSelectedPkg] = useState<Package | null>(null)
 
-  const handlePesan = (pkg: Package) => {
-    // TODO: buka BookingModal (Step 8)
-    console.log("Pesan:", pkg.name)
-  }
+  const handlePesan = (pkg: Package) => setSelectedPkg(pkg)
 
   const handleTambahPaket = (pkg: Package) => {
     // TODO: tambah ke keranjang (Step 9)
@@ -36,6 +35,12 @@ const App = () => {
         )}
         {activeTab === "tambahan" && <AddonGrid onTambah={handleTambahAddon} />}
       </div>
+
+      <BookingModal
+        pkg={selectedPkg}
+        open={selectedPkg !== null}
+        onClose={() => setSelectedPkg(null)}
+      />
     </main>
   )
 }
