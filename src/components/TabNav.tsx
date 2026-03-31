@@ -12,7 +12,6 @@ const tabs = [
   { value: "sepuasnya", label: "Sepuasnya", labelDesktop: "Makan Sepuasnya" },
   { value: "rame", label: "Paket Rame", labelDesktop: "Paket Rame" },
   { value: "tambahan", label: "Tambahan", labelDesktop: "Tambahan" },
-  { value: "ulasan", label: "Ulasan", labelDesktop: "Ulasan" },
 ]
 
 const TabNav = ({ activeTab, onTabChange, onCartClick }: TabNavProps) => {

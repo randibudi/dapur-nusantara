@@ -26,6 +26,16 @@ export const localToday = (): string => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 }
 
+// Format a date string as a relative human-readable label (e.g. "3 hari yang lalu")
+export const relativeDate = (dateStr: string): string => {
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 86400000)
+  if (diff === 0) return "Hari ini"
+  if (diff === 1) return "Kemarin"
+  if (diff < 30) return `${diff} hari yang lalu`
+  if (diff < 365) return `${Math.floor(diff / 30)} bulan yang lalu`
+  return `${Math.floor(diff / 365)} tahun yang lalu`
+}
+
 // Filter out past time slots when selected date is today
 export const filterPastSlots = (slots: string[], selectedDate: string): string[] => {
   const d = new Date()

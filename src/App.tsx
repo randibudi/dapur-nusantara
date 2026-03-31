@@ -7,7 +7,7 @@ import FAQ from "@/components/FAQ"
 import Footer from "@/components/Footer"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
-import ReviewSection from "@/components/ReviewSection"
+import Reviews from "@/components/Reviews"
 import TabNav from "@/components/TabNav"
 import { useCart } from "@/context/CartContext"
 import type { Addon, Package } from "@/types"
@@ -28,7 +28,7 @@ const App = () => {
         onCartClick={() => setCartOpen(true)}
       />
 
-      <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+      <div className="mx-auto max-w-4xl px-4 pt-6 pb-0 sm:px-6">
         {(activeTab === "sepuasnya" || activeTab === "rame") && (
           <PackageGrid
             activeTab={activeTab}
@@ -47,9 +47,9 @@ const App = () => {
             }}
           />
         )}
-        {activeTab === "ulasan" && <ReviewSection />}
       </div>
 
+      <Reviews />
       <FAQ />
       <BookingModal
         pkg={selectedPkg}
