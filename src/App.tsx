@@ -3,6 +3,7 @@ import { toast } from "sonner"
 import AddonGrid from "@/components/AddonGrid"
 import BookingModal from "@/components/BookingModal"
 import CartDrawer from "@/components/CartDrawer"
+import FAQ from "@/components/FAQ"
 import Footer from "@/components/Footer"
 import Hero from "@/components/Hero"
 import PackageGrid from "@/components/PackageGrid"
@@ -49,6 +50,7 @@ const App = () => {
         {activeTab === "ulasan" && <ReviewSection />}
       </div>
 
+      <FAQ />
       <BookingModal
         pkg={selectedPkg}
         open={selectedPkg !== null}

@@ -51,6 +51,11 @@ export interface Review {
   packageName: string
 }
 
+export interface FAQ {
+  question: string
+  answer: string
+}
+
 export interface PriceBreakdown {
   subtotal: number
   tax: number
